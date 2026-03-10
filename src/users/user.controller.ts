@@ -1,10 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 
 @Controller('/users')
 export class Users {
-    
+
  @Get()
-  AllUsers() {
-    return 'All users of count is 1200';
+  AllUsers():string {
+    return `Your order is ready`;
   }
 }
