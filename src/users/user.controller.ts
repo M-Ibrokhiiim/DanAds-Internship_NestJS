@@ -1,40 +1,37 @@
-import { Controller, Delete, Get, Options, Post, Put } from '@nestjs/common';
-
-@Controller('/users')
-export class Users {
+import { Controller, Delete, Get, Options, Post, Put, Param, HttpCode, Body } from '@nestjs/common';
+ 
+@Controller('users')
+export class Users  {
+  private users:{id:number, name: string}[] =  [
+                 {"id":1, name: 'Ibrokhiiim'},
+                 {"id":2, name: 'Elshod1'},
+                 {"id":3, name: 'Diyor'},
+                 {"id":4, name: 'Anvar'},
+                 ]
 
   @Get()
-  AllUsers():string {
-    return `Your order is ready`;
-  }
-
-  @Post() 
-   CreateNewUser():string {
-    // 
-    // 
-    // 
-    // 
-    return `User successfully created!`
-
+   AllUsers():{id:number, name: string}[] {
+    return  this.users
    }
 
-  @Put()
-    UpdateUser():string {
-      // 
-      // 
-      // 
-      return `User is updated!`
+  @Get('users/name/:id')
+    ExactUser(@Param('id') id:string ):{id:number, name: string}[] {
+      return this.users.filter((user) => Number(user.id) === Number(id))
+    } 
+  
+  @Post('/newUser')
+    CreateUser(@Body() body:any){
+      const newUser = {id:this.users.length + 1, name: body.name} 
+      this.users.push(newUser)
+
+       return { status:201, message:`${body.name} is added to Database !` }
     }
 
-  @Delete()
-     RemoveUser():string {
-      // 
-      // 
-      return `User deleted!`
-     }
+    @Delete('user/:id')
+     DeleteUser(@Param('id') id:string) {
+      this.users = this.users.filter((user) => Number(user.id) !== Number(id))
 
-  @Options()
-      Options():string {
-        return ' You can call GET, POST, PUT, DELETE HTTP methods to this users URL!'
+      return 'User deleted!'
      }
+  
 }
