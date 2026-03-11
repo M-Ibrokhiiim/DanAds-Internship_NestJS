@@ -4,9 +4,7 @@ import { UsersType, UserService } from './user.service';
 @Controller('users')
 export class UsersController  {
 
-  constructor(private userActions: UserService){
-
-  }
+  constructor(private userActions: UserService){}
   
   @Get()
    AllUsers():UsersType[] {
