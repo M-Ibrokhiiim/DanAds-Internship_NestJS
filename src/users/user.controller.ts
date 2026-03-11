@@ -1,37 +1,31 @@
 import { Controller, Delete, Get, Options, Post, Put, Param, HttpCode, Body } from '@nestjs/common';
+import { UsersType, UserService } from './user.service';
  
 @Controller('users')
-export class Users  {
-  private users:{id:number, name: string}[] =  [
-                 {"id":1, name: 'Ibrokhiiim'},
-                 {"id":2, name: 'Elshod1'},
-                 {"id":3, name: 'Diyor'},
-                 {"id":4, name: 'Anvar'},
-                 ]
+export class UsersController  {
 
+  constructor(private userActions: UserService){
+
+  }
+  
   @Get()
-   AllUsers():{id:number, name: string}[] {
-    return  this.users
+   AllUsers():UsersType[] {
+    return  this.userActions.ReturnAllUsers()
    }
 
-  @Get('users/name/:id')
-    ExactUser(@Param('id') id:string ):{id:number, name: string}[] {
-      return this.users.filter((user) => Number(user.id) === Number(id))
+  @Get('/name/:id')
+    UserByID(@Param('id') id:string ):UsersType[] {
+      return this.userActions.ReturnUserById(Number(id))
     } 
   
   @Post('/newUser')
     CreateUser(@Body() body:any){
-      const newUser = {id:this.users.length + 1, name: body.name} 
-      this.users.push(newUser)
-
-       return { status:201, message:`${body.name} is added to Database !` }
+     return this.userActions.PostNewUser(body.name)
     }
 
     @Delete('user/:id')
      DeleteUser(@Param('id') id:string) {
-      this.users = this.users.filter((user) => Number(user.id) !== Number(id))
-
-      return 'User deleted!'
+      return this.userActions.DeleteUser(Number(id))
      }
-  
+
 }

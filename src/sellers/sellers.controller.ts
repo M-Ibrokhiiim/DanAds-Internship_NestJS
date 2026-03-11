@@ -6,6 +6,10 @@ export class Sellers{
         {id:1, name:"Ibrokhiiim"}
     ]
 
+
+    get(){
+        return 'Hi!'
+    }
   @Get('/all')
    AllSellers(){
     return this.sellers
@@ -24,3 +28,5 @@ export class Sellers{
         return {status:201, msg:'Seller successfully created!'}
     }
 }
+
+ 
