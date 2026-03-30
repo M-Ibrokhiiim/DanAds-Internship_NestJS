@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Query, Post, Put, Delete, HttpCode } from "@nestjs/common";
+import { Body, Controller, Get, Param, Query, Post, Put, Delete, HttpCode, NotFoundException } from "@nestjs/common";
 import { NewUser } from "./dto/create-user.dto";
 import { conceptsActions } from "./concepts.service";
 
@@ -11,7 +11,12 @@ export class ConceptualTraining {
     //POST -> Add new user to DB 
     @Post('/user')
       AddNewUser(@Body() body:NewUser ) {
-        return  this.Actions.CreateNewUser(body)
+        try{
+            return  this.Actions.CreateNewUser(body)
+        }catch(err){
+            throw new NotFoundException(err.message)
+        }
+       
     } 
       
     //GET -> Read users from DB
@@ -26,14 +31,23 @@ export class ConceptualTraining {
         @Body() body,
         @Param('id') id:number
     ) {
-       return this.Actions.UpdateUser(id, body)
+        try{
+           return this.Actions.UpdateUser(id, body)
+        }catch(err){
+            throw new NotFoundException(err.message)
+        }
+       
     }
 
     //DELETE -> Delete user from DB
     @Delete('/user/:id')
     @HttpCode(200)
       RemoveUser( @Param('id') id:number  ) {
-        return this.Actions.RemoveUser(id)
+        try{
+          return this.Actions.RemoveUser(id)
+        }catch(err){
+            throw new NotFoundException(err.message)
+        }
     }
 
 }
