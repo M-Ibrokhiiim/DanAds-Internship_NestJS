@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { FullAppModule } from './full.module';
+import { CarsModule } from './cars/cars.module'
+import { Concepts } from './concepts/concepts.module';
+ 
 @Module({
-  imports: [FullAppModule],
+  imports: [ CarsModule, Concepts, ],
   controllers: [],
   providers: [],
 })
