@@ -1,6 +1,7 @@
 import { IsString, Min, Max, isNumber, IsNotEmpty, IsNumber} from 'class-validator'
 
 export class NewUser {
+     
     @IsNotEmpty()
     @IsString()
     name: string
