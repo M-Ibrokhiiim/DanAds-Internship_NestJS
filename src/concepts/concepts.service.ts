@@ -1,8 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException} from "@nestjs/common";
 
 @Injectable()
 export class conceptsActions {
-
     private data = [
             {
                 id: 1,
@@ -46,6 +45,15 @@ export class conceptsActions {
             },
         ];
 
+
+    // Expection handler
+    NotFoundERR(id:number){
+        const isExist = this.data.filter(user => { return user.id === id})
+
+        if(isExist.length === 0) {
+            throw new NotFoundException(`Sorry, ${id} id took user not found.`)
+        }
+    }
     // POST
     CreateNewUser(user){
         const newUser = { 
@@ -68,6 +76,8 @@ export class conceptsActions {
 
     // PUT
     UpdateUser(id:number, user){
+        this.NotFoundERR(id)
+
         this.data = this.data.filter(user => { return  user.id !== id})
         this.data.push(user)
         
@@ -76,7 +86,8 @@ export class conceptsActions {
 
     // DELETE
     RemoveUser(id:number){
-        this.data = this.data.filter(user => { user.id !== id })
+        this.NotFoundERR(id)
+        this.data = this.data.filter(user => {return  user.id !== id })
 
         return { msg:'User successfully deleted!', statusCode:200 }
     }

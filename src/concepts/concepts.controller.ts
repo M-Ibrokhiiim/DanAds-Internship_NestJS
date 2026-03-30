@@ -23,7 +23,7 @@ export class ConceptualTraining {
     //PUT -> Update user
     @Put('user/:id')  
       UpdateUser(
-        @Body() body:NewUser,
+        @Body() body,
         @Param('id') id:number
     ) {
        return this.Actions.UpdateUser(id, body)
