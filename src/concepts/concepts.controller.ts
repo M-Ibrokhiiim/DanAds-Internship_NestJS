@@ -10,9 +10,9 @@ export class ConceptualTraining {
 
     //POST -> Add new user to DB 
     @Post('/user')
-      AddNewUser(@Body() body:NewUser ) {
+      AddNewUser(@Body() newUser:NewUser ) {
         try{
-            return  this.Actions.CreateNewUser(body)
+            return  this.Actions.CreateNewUser(newUser)
         }catch(err){
             throw new NotFoundException(err.message)
         }

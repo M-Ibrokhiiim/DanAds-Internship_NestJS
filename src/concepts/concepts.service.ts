@@ -1,5 +1,10 @@
 import { Injectable, NotFoundException} from "@nestjs/common";
-
+import { ReturnCreatedUserDTO } from "./dto/back-user.dto";
+import { plainToInstance } from "class-transformer"
+import { UdatedUserDTO } from "./dto/updated-user.dto"
+import { ReturnUsersInfo } from "./dto/all-users.dto";
+import { NotFound } from "../utils/notFound";
+ 
 @Injectable()
 export class conceptsActions {
     private data = [
@@ -47,7 +52,7 @@ export class conceptsActions {
 
 
     // Expection handler
-    NotFoundERR(id:number){
+    NotFoundERR(id:number) {
         const isExist = this.data.filter(user => { return user.id === id})
 
         if(isExist.length === 0) {
@@ -55,7 +60,7 @@ export class conceptsActions {
         }
     }
     // POST
-    CreateNewUser(user){
+    CreateNewUser(user) {
         const newUser = { 
            id:this.data.length + 1, 
            name:user.name, 
@@ -64,29 +69,35 @@ export class conceptsActions {
            password:user.password, 
            age:user.age
         }  
+
         this.data.push(newUser)
-        
-        return { msg:'User successfully created', statusCode:201 }
+
+        const createdUser  =  plainToInstance(ReturnCreatedUserDTO, newUser, { excludeExtraneousValues:true })
+
+        return { user:createdUser ,msg:'User successfully created', statusCode:201 }
     }
   
     // GET
-    GetUsers(){
-        return this.data.sort((a,b) => a.id - b.id)
+    GetUsers() {
+        const users =this.data.map(user => plainToInstance(ReturnUsersInfo,user, {excludeExtraneousValues: true})) 
+         
+        return users.sort((a,b) => a.id - b.id)
     }    
 
     // PUT
-    UpdateUser(id:number, user){
-        this.NotFoundERR(id)
+    UpdateUser(id:number, user) {
+        NotFound(id, this.data)
 
         this.data = this.data.filter(user => { return  user.id !== id})
         this.data.push(user)
         
-        return { msg: 'User successfully updated!', statusCode:200 }
+        const updatedUser = plainToInstance(UdatedUserDTO, user, { excludeExtraneousValues: true })
+        return { updatedUser,  msg: 'User successfully updated!', statusCode:200 }
     }
 
     // DELETE
-    RemoveUser(id:number){
-        this.NotFoundERR(id)
+    RemoveUser(id:number) {
+        NotFound(id, this.data)
         this.data = this.data.filter(user => {return  user.id !== id })
 
         return { msg:'User successfully deleted!', statusCode:200 }
