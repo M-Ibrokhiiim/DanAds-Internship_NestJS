@@ -51,14 +51,6 @@ export class conceptsActions {
         ];
 
 
-    // Expection handler
-    NotFoundERR(id:number) {
-        const isExist = this.data.filter(user => { return user.id === id})
-
-        if(isExist.length === 0) {
-            throw new NotFoundException(`Sorry, ${id} id took user not found.`)
-        }
-    }
     // POST
     CreateNewUser(user) {
         const newUser = { 
