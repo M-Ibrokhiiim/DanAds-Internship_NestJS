@@ -6,7 +6,7 @@ import { NextFunction, Request, Response } from "express"
 export class PracticeMiddlewar implements NestMiddleware {
     use(req: Request, res: Response, next:NextFunction) {
         if(req.body) {
-            res.status(200).json({msg: 'You are sending data to server!'})
+            return res.status(200).json({msg: 'You are sending data to server!'})
         }
         
         next()
