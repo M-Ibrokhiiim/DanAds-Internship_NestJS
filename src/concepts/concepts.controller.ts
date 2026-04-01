@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Query, Post, Put, Delete, HttpCode, NotFoundException } from "@nestjs/common";
 import { NewUser } from "./dto/create-user.dto";
 import { conceptsActions } from "./concepts.service";
+import { PostUserValidateDTO } from "./dto/posted-user.dto";
 
 @Controller('/concepts')
 
@@ -50,4 +51,12 @@ export class ConceptualTraining {
         }
     }
 
+
+
+    // Practice
+    @Post('/practice/user')
+     PostUser(@Body() body:PostUserValidateDTO) {
+        return this.Actions.PostUser(body)
+     }
+     
 }

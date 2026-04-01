@@ -4,6 +4,7 @@ import { plainToInstance } from "class-transformer"
 import { UdatedUserDTO } from "./dto/updated-user.dto"
 import { ReturnUsersInfo } from "./dto/all-users.dto";
 import { NotFound } from "../utils/notFound";
+import { PostUserDTO } from './dto/posted-user.dto'
  
 @Injectable()
 export class conceptsActions {
@@ -95,4 +96,13 @@ export class conceptsActions {
         return { msg:'User successfully deleted!', statusCode:200 }
     }
     
+
+    // Practice
+
+    // POST
+    PostUser (user) {
+        const newUser = plainToInstance(PostUserDTO, user, { excludeExtraneousValues: true})
+
+        return {newUser, statusCode: 201}
+    }
 }
