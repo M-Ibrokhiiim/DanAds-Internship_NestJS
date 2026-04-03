@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException} from "@nestjs/common";
 import { ReturnCreatedUserDTO } from "./dto/back-user.dto";
 import { plainToInstance } from "class-transformer"
-import { UdatedUserDTO } from "./dto/updated-user.dto"
+import { UpdatedUserDTO } from "./dto/updated-user.dto"
 import { ReturnUsersInfo } from "./dto/all-users.dto";
 import { NotFound } from "../utils/notFound";
 import { PostUserDTO } from './dto/posted-user.dto'
@@ -72,19 +72,21 @@ export class conceptsActions {
   
     // GET
     GetUsers() {
-        const users =this.data.map(user => plainToInstance(ReturnUsersInfo,user, {excludeExtraneousValues: true})) 
-         
+        const users =this.data.map(user => plainToInstance(ReturnUsersInfo, user, {excludeExtraneousValues: true})) 
+        
         return users.sort((a,b) => a.id - b.id)
     }    
 
     // PUT
     UpdateUser(id:number, user) {
-        NotFound(id, this.data)
-
+        if(id) {
+           NotFound(id, this.data)
+        }
+        
         this.data = this.data.filter(user => { return  user.id !== id})
         this.data.push(user)
         
-        const updatedUser = plainToInstance(UdatedUserDTO, user, { excludeExtraneousValues: true })
+        const updatedUser = plainToInstance(UpdatedUserDTO, user, { excludeExtraneousValues: true })
         return { updatedUser,  msg: 'User successfully updated!', statusCode:200 }
     }
 

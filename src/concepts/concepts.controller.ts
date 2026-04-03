@@ -1,16 +1,19 @@
-import { Body, Controller, Get, Param, Query, Post, Put, Delete, HttpCode, NotFoundException } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, Delete, HttpCode, NotFoundException, ParseIntPipe, UseGuards } from "@nestjs/common";
 import { NewUser } from "./dto/create-user.dto";
 import { conceptsActions } from "./concepts.service";
 import { PostUserValidateDTO } from "./dto/posted-user.dto";
+import { TransformToInt } from "../pipe/concepts.pipe"
+import { ValidateUpdatingUserDTO } from "./dto/updated-user.dto";
+import { AuthorizeUser } from "../guards/authorization.guard"
 
 @Controller('/concepts')
-
 export class ConceptualTraining {
 
     constructor(private Actions:conceptsActions){}
 
     //POST -> Add new user to DB 
     @Post('/user')
+    @UseGuards(AuthorizeUser)
       AddNewUser(@Body() newUser:NewUser ) {
         try{
             return  this.Actions.CreateNewUser(newUser)
@@ -27,10 +30,11 @@ export class ConceptualTraining {
     }
 
     //PUT -> Update user
+    
     @Put('user/:id')  
       UpdateUser(
-        @Body() body,
-        @Param('id') id:number
+        @Body(new TransformToInt()) body: ValidateUpdatingUserDTO,
+        @Param('id', ParseIntPipe) id: number
     ) {
         try{
            return this.Actions.UpdateUser(id, body)
@@ -43,14 +47,13 @@ export class ConceptualTraining {
     //DELETE -> Delete user from DB
     @Delete('/user/:id')
     @HttpCode(200)
-      RemoveUser( @Param('id') id:number  ) {
+      RemoveUser( @Param('id',ParseIntPipe) id:number  ) {
         try{
           return this.Actions.RemoveUser(id)
         }catch(err){
             throw new NotFoundException(err.message)
         }
     }
-
 
 
     // Practice
