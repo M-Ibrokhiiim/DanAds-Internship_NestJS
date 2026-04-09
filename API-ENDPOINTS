@@ -1,0 +1,7 @@
+POST: http://localhost:3000/concepts/user
+GET: http://localhost:3000/concepts/users/all
+PUT: http://localhost:3000/concepts/user/:id  
+DELETE: http://localhost:3000/concepts/user/:id
+
+
+- Request body required at POST, PUT requests.
